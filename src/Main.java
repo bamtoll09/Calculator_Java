@@ -110,14 +110,19 @@ class Calculator extends JFrame implements ActionListener {
 					b = Integer.valueOf(result.substring(start, i));
 					switch (result.charAt(operator)) {
 					case '+':
+						num = a+b;
 						break;
 					case '-':
+						num = a-b;
 						break;
 					case '*':
+						num = a*b;
 						break;
 					case '/':
+						num = a/b;
 						break;
 					case '%':
+						num = a%b;
 						break;
 					}
 					operator = i;
