@@ -32,8 +32,10 @@ class Calculator extends JFrame implements ActionListener {
 	JLabel label = new JLabel("");
 	JButton[] button = new JButton[20];
 	
+	boolean operatorOverlap = true;
 	String result = "";
-	int operator = (Integer) null;
+//	int operator = 0;
+	String operator = "";
 	int a = 0, b = 0, start = 0, num = 0;
 	String[] btn = {"AC", "%", "/", "←",
 					"7", "8", "9", "*",
@@ -80,13 +82,64 @@ class Calculator extends JFrame implements ActionListener {
 	}
 	
 	public void clear() {
+		operator = "";
+		a = 0;
+		b = 0;
+		operatorOverlap = true;
 		result = "";
 		label.setText(result);
 	}
 	
+	public void operator(String val) {
+		if (!operatorOverlap) {
+			if (!operator.equals("")) {
+				b = Integer.valueOf(result);
+				switch (operator) {
+				case "+": 
+					a += b;
+					break;
+				case "-":
+					a -= b;
+					break;
+				case "*":
+					a *= b;
+					break;
+				case "/":
+					a /= b;
+					break;
+				case "%":
+					a %= b;
+					break;
+				}
+			}
+			operator = val;
+			if (a == 0) {
+				a = Integer.valueOf(result);
+			}
+			if (operator == "=") {
+				result = "= " + a;
+				label.setText(result);
+				a = 0;
+				b = 0;
+			} else {
+				result = a + "";
+				label.setText(result);
+				result = "";
+			}
+		}
+		operatorOverlap = true;
+	}
+	
 	public void change(String val) {
+		if (operator == "=") {
+			operator = "";
+			result = "";
+		}
 		result = result + val;
 		label.setText(result);
+		if (operatorOverlap) {
+			operatorOverlap = !operatorOverlap;
+		}
 	}
 	
 	public void delete() {
@@ -97,39 +150,69 @@ class Calculator extends JFrame implements ActionListener {
 	}
 	
 	public void result() {
-		if (start != 0) 
-			start = 0;
-		for (int i=0; i<result.length(); i++) {
-			if ('9' < result.charAt(i)) {
-				if (operator == (Integer)null) {
-					operator = i;
+		/*if ((result.charAt(0) >= '0' && result.charAt(0) <= '9') && (result.charAt(result.length()-1) >= '0' && result.charAt(result.length()-1) <= '9')) {
+			if (start != 0) { 
+				start = 0;
+				operator = 0;
+			}
+			for (int i=0; i<result.length(); i++) {
+				if ('9' < result.charAt(i)) {
+					if (operator == 0) {
+						operator = i;
+					}
+					else {
+						if (a == 0)
+							a = Integer.valueOf(result.substring(start, operator));
+						System.out.println(a);
+						start = operator + 1;
+						b = Integer.valueOf(result.substring(start, i));
+						switch (result.charAt(operator)) {
+						case '+':
+							a = a+b;
+							break;
+						case '-':
+							a = a-b;
+							break;
+						case '*':
+							a = a*b;
+							break;
+						case '/':
+							a = a/b;
+							break;
+						case '%':
+							a = a%b;
+							break;
+						}
+						operator = i;
+					}
 				}
-				else {
-					a = Integer.valueOf(result.substring(start, operator));
+				else if (i == result.length()-1) {
 					start = operator + 1;
-					b = Integer.valueOf(result.substring(start, i));
-					switch (result.charAt(operator)) {
+					System.out.println(a);
+					b = Integer.valueOf(result.substring(start+1, i+1));
+					System.out.println(result.charAt(operator+1));
+					switch (result.charAt(operator+1)) {
 					case '+':
-						num = a+b;
+						a = a+b;
 						break;
 					case '-':
-						num = a-b;
+						a = a-b;
 						break;
 					case '*':
-						num = a*b;
+						a = a*b;
 						break;
 					case '/':
-						num = a/b;
+						a = a/b;
 						break;
 					case '%':
-						num = a%b;
+						a = a%b;
 						break;
 					}
-					operator = i;
-					
+					result = String.valueOf(a);
+					label.setText(result);
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -165,19 +248,24 @@ class Calculator extends JFrame implements ActionListener {
 			change("9");
 			break;
 		case "+":
-			change("+");
+//			change("+");
+			operator("+");
 			break;
 		case "-":
-			change("-");
+//			change("-");
+			operator("-");
 			break;
 		case "*":
-			change("*");
+//			change("*");
+			operator("*");
 			break;
 		case "/":
-			change("/");
+//			change("/");
+			operator("/");
 			break;
 		case "=":
-			result();
+//			result();
+			operator("=");
 			break;
 		case "←":
 			delete();
@@ -186,13 +274,14 @@ class Calculator extends JFrame implements ActionListener {
 			clear();
 			break;
 		case "( )":
-			change("(");
+//			change("(");
 			break;
 		case ".":
-			change(".");
+//			change(".");
 			break;
 		case "%":
-			change("%");
+//			change("%");
+			operator("%");
 			break;
 		}
 	}
@@ -206,7 +295,7 @@ class ButtonLayout extends JFrame {
 	public ButtonLayout() {
 		setSize(300, 400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("룰루랄라");
+		setTitle("주린이 바보");
 		setVisible(true);
 		panel.setLayout(null);
 		add(panel);
